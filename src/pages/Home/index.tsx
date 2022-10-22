@@ -1,5 +1,15 @@
+import { PostList } from "./components/PostList";
+import { PublicationsSearchBar } from "./components/PublicationsSearchBar";
+import { TitleCard } from "./components/TitleCard";
+import { HomeContainer } from "./styles";
+
 export function Home() {
     return(
-        <h1>Home</h1>
+        <HomeContainer>
+            <TitleCard />
+            <PublicationsSearchBar />
+            <PostList />
+
+        </HomeContainer>
     )
 }

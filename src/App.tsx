@@ -12,8 +12,7 @@ export function App() {
       <BrowserRouter>
         <Router />
       </BrowserRouter>
-      
-      <h1>Hello World</h1>
+
     </ThemeProvider>
   )
 }
