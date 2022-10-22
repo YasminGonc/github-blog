@@ -3,35 +3,41 @@ import { ContentContainer, IconContainer, TitleCardContainer, TitleContainer } f
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUpRightFromSquare, faBuilding, faUserGroup } from "@fortawesome/free-solid-svg-icons";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
+import { useContext } from "react";
+import { GitHubContext } from "../../../../context/GitHubContext";
 
 export function TitleCard() {
-    return(
+    const { gitHubInfos } = useContext(GitHubContext);
+
+    return (
         <TitleCardContainer>
-            <img src="https://github.com/YasminGonc.png" alt="" />
-            
+            <img src={gitHubInfos?.avatar} alt="" />
+
             <ContentContainer>
                 <TitleContainer>
-                    <h2>Cameron Williamson</h2>
-                    <a href="">
+                    <h2>{gitHubInfos?.name}</h2>
+                    <a href={gitHubInfos?.page_url} target="blank">
                         GitHub
                         <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
                     </a>
                 </TitleContainer>
 
-                <p>Tristique volutpat pulvinar vel massa, pellentesque egestas. Eu viverra massa quam dignissim aenean malesuada suscipit. Nunc, volutpat pulvinar vel mass.</p>
+                <p>{gitHubInfos?.bio}</p>
 
                 <IconContainer>
                     <span>
                         <FontAwesomeIcon icon={faGithub} />
-                        cameronwll
+                        {gitHubInfos?.login}
                     </span>
-                    <span>
-                        <FontAwesomeIcon icon={faBuilding} />
-                        Rocketseat
-                    </span>
+                    {gitHubInfos?.company &&
+                        <span>
+                            <FontAwesomeIcon icon={faBuilding} />
+                            {gitHubInfos?.company}
+                        </span>
+                    }
                     <span>
                         <FontAwesomeIcon icon={faUserGroup} />
-                        32 seguidores
+                        {gitHubInfos?.followers} seguidores
                     </span>
                 </IconContainer>
             </ContentContainer>
