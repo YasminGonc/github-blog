@@ -40,6 +40,7 @@ export const TitleContainer = styled.div`
     span {
         font-size: 0.875rem;
         color: ${props => props.theme["base-span"]};
+        text-align: right;
     }
 `
 export const TextContainer = styled.div`
