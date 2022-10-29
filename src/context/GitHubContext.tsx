@@ -1,3 +1,5 @@
+import { formatDistanceToNow } from "date-fns";
+import ptBR from "date-fns/locale/pt-BR";
 import { createContext, ReactNode, useEffect, useState } from "react";
 
 interface GitHubData {
@@ -14,12 +16,18 @@ interface IssuesContent {
     title: string;
     body: string;
     number: number;
+    html_url: string;
+    created_at: string;
+    comments: number;
 }
 
 interface GitHubContextType {
     gitHubInfos: GitHubData | null;
     issuesCount: number;
     issuesContent: IssuesContent[];
+    postIndex: number;
+    handlePostIndex: (index: number) => void;
+    handlePublishedDateRelativeToNow: (date: string) => string;
 }
 
 export const GitHubContext = createContext({} as GitHubContextType);
@@ -32,6 +40,7 @@ export function GitHubProvider({ children }: GitHubProviderProps) {
     const [gitHubInfos, setGitHubInfos] = useState<GitHubData | null>(null);
     const [issuesCount, setIssuesCount] = useState(0);
     const [issuesContent, setIssuesContent] = useState<IssuesContent[]>([]);
+    const [postIndex, setPostIndex] = useState<number>(0);
     
     useEffect(() => {
         fetch('https://api.github.com/users/YasminGonc')
@@ -56,14 +65,26 @@ export function GitHubProvider({ children }: GitHubProviderProps) {
             .then(data => {
                 setIssuesCount(data.total_count);
                 setIssuesContent(data.items);
-                //console.log(data.items)
             });
     }, []);
 
-    console.log(issuesContent[0]);
+    function handlePostIndex(index: number) {
+        setPostIndex(index);
+    }
+
+    function handlePublishedDateRelativeToNow(date: string) {
+        const transformStringToDate = new Date(date);
+
+        const publishedDateRelativeToNow = formatDistanceToNow(transformStringToDate, {
+            locale: ptBR,
+            addSuffix: true,
+        });
+
+        return publishedDateRelativeToNow;
+    }
 
     return(
-        <GitHubContext.Provider value={{ gitHubInfos, issuesCount, issuesContent }}>
+        <GitHubContext.Provider value={{ gitHubInfos, issuesCount, issuesContent, postIndex, handlePostIndex, handlePublishedDateRelativeToNow }}>
             {children}
         </GitHubContext.Provider>
     )

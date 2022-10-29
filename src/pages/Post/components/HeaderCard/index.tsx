@@ -3,8 +3,12 @@ import { HeaderCardContainer, IconContainer, LinkContainer, NavigationLink } fro
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { faArrowUpRightFromSquare, faChevronLeft, faCalendarDay, faComment } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useContext } from "react";
+import { GitHubContext } from "../../../../context/GitHubContext";
 
 export function HeaderCard() {
+    const { issuesContent, postIndex, handlePublishedDateRelativeToNow } = useContext(GitHubContext);
+    
     return (
         <HeaderCardContainer>
             <LinkContainer>
@@ -12,28 +16,28 @@ export function HeaderCard() {
                     <FontAwesomeIcon icon={faChevronLeft} />
                     Voltar
                 </NavigationLink>
-                <a href="">
+                <a href={issuesContent[postIndex].html_url} target="blank">
                     Ver no Github
                     <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
                 </a>
             </LinkContainer>
 
-            <h2>JavaScript data types and data structures</h2>
+            <h2>{issuesContent[postIndex].title}</h2>
 
             <IconContainer>
                 <span>
                     <FontAwesomeIcon icon={faGithub} />
-                    cameronwll
+                    YasminGonc
                 </span>
 
                 <span>
                     <FontAwesomeIcon icon={faCalendarDay} />
-                    Há 1 dia
+                    {handlePublishedDateRelativeToNow(issuesContent[postIndex].created_at)}
                 </span>
 
                 <span>
                     <FontAwesomeIcon icon={faComment} />
-                    5 comentários
+                    {issuesContent[postIndex].comments} {issuesContent[postIndex].comments <=1 ? 'comentário' : 'comentários'} 
                 </span>
             </IconContainer>
         </HeaderCardContainer>

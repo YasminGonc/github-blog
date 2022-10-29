@@ -28,6 +28,7 @@ export const PostContainer = styled.div`
 export const TitleContainer = styled.div`
     display: grid;
     grid-template-columns: auto auto;
+    gap: 0.5rem;
 
     margin-bottom: 1.25rem;
 
