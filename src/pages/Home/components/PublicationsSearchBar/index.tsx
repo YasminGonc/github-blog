@@ -1,11 +1,20 @@
 import { useContext } from "react";
+import { useForm } from "react-hook-form";
 import { GitHubContext } from "../../../../context/GitHubContext";
 import { PublicationsSearchBarContainer, SearchInput, TitleContainer } from "./styles";
 
 export function PublicationsSearchBar() {
-    const { issuesCount } = useContext(GitHubContext);
+    const { issuesCount, fetchIssues } = useContext(GitHubContext);
 
-    return(
+    const { register, getValues } = useForm();
+
+    function handleInputValueChange() {
+        const inputValue = getValues('query');
+        console.log(inputValue);
+        fetchIssues(inputValue);
+    }
+    
+    return (
         <PublicationsSearchBarContainer>
             <TitleContainer>
                 <h2>Publicações</h2>
@@ -13,7 +22,13 @@ export function PublicationsSearchBar() {
             </TitleContainer>
 
             <form action="">
-                <SearchInput type="text" placeholder="Buscar conteúdo" />
+                <SearchInput
+                    type="text"
+                    placeholder="Buscar conteúdo"
+                    {...register('query', {
+                        onChange: () => handleInputValueChange()
+                    })}
+                />
             </form>
         </PublicationsSearchBarContainer>
     )

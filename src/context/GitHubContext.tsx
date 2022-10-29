@@ -1,3 +1,4 @@
+import axios from "axios";
 import { formatDistanceToNow } from "date-fns";
 import ptBR from "date-fns/locale/pt-BR";
 import { createContext, ReactNode, useEffect, useState } from "react";
@@ -10,6 +11,11 @@ interface GitHubData {
     login: string;
     company: string;
     followers: string;
+}
+
+interface IssuesReturn {
+    total_count: number;
+    items: any;
 }
 
 interface IssuesContent {
@@ -28,6 +34,7 @@ interface GitHubContextType {
     postIndex: number;
     handlePostIndex: (index: number) => void;
     handlePublishedDateRelativeToNow: (date: string) => string;
+    fetchIssues: (query?: string) => Promise<void>;
 }
 
 export const GitHubContext = createContext({} as GitHubContextType);
@@ -41,7 +48,23 @@ export function GitHubProvider({ children }: GitHubProviderProps) {
     const [issuesCount, setIssuesCount] = useState(0);
     const [issuesContent, setIssuesContent] = useState<IssuesContent[]>([]);
     const [postIndex, setPostIndex] = useState<number>(0);
-    
+
+    async function fetchIssues(query?: string) {
+        if (!query) {
+            const response = await axios.get(`https://api.github.com/search/issues?q=user:YasminGonc`);
+
+            setIssuesCount(response.data.total_count)
+            setIssuesContent(response.data.items);
+        }
+        else {
+            const response = await axios.get(`https://api.github.com/search/issues?q=user:YasminGonc%20${query}`);
+
+            setIssuesCount(response.data.total_count)
+            setIssuesContent(response.data.items);
+        }
+
+    }
+
     useEffect(() => {
         fetch('https://api.github.com/users/YasminGonc')
             .then(response => response.json())
@@ -60,12 +83,7 @@ export function GitHubProvider({ children }: GitHubProviderProps) {
     }, []);
 
     useEffect(() => {
-        fetch('https://api.github.com/search/issues?q=user:YasminGonc')
-            .then(response => response.json())
-            .then(data => {
-                setIssuesCount(data.total_count);
-                setIssuesContent(data.items);
-            });
+        fetchIssues();
     }, []);
 
     function handlePostIndex(index: number) {
@@ -83,8 +101,8 @@ export function GitHubProvider({ children }: GitHubProviderProps) {
         return publishedDateRelativeToNow;
     }
 
-    return(
-        <GitHubContext.Provider value={{ gitHubInfos, issuesCount, issuesContent, postIndex, handlePostIndex, handlePublishedDateRelativeToNow }}>
+    return (
+        <GitHubContext.Provider value={{ gitHubInfos, issuesCount, issuesContent, postIndex, handlePostIndex, handlePublishedDateRelativeToNow, fetchIssues }}>
             {children}
         </GitHubContext.Provider>
     )
