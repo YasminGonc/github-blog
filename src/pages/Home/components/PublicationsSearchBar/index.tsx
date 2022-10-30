@@ -10,7 +10,6 @@ export function PublicationsSearchBar() {
 
     function handleInputValueChange() {
         const inputValue = getValues('query');
-        console.log(inputValue);
         fetchIssues(inputValue);
     }
     

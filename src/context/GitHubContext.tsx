@@ -50,19 +50,23 @@ export function GitHubProvider({ children }: GitHubProviderProps) {
     const [postIndex, setPostIndex] = useState<number>(0);
 
     async function fetchIssues(query?: string) {
-        if (!query) {
-            const response = await axios.get(`https://api.github.com/search/issues?q=user:YasminGonc`);
-
-            setIssuesCount(response.data.total_count)
-            setIssuesContent(response.data.items);
+        try {
+            if (!query) {
+                const response = await axios.get(`https://api.github.com/search/issues?q=user:YasminGonc`);
+    
+                setIssuesCount(response.data.total_count)
+                setIssuesContent(response.data.items);
+            }
+            else {
+                const response = await axios.get(`https://api.github.com/search/issues?q=user:YasminGonc%20${query}`);
+    
+                setIssuesCount(response.data.total_count)
+                setIssuesContent(response.data.items);
+            }
         }
-        else {
-            const response = await axios.get(`https://api.github.com/search/issues?q=user:YasminGonc%20${query}`);
-
-            setIssuesCount(response.data.total_count)
-            setIssuesContent(response.data.items);
+        catch {
+            console.log("erro");
         }
-
     }
 
     useEffect(() => {

@@ -1,4 +1,5 @@
 import { useContext } from "react";
+import ReactMarkdown from "react-markdown";
 import { useNavigate } from "react-router-dom";
 import { GitHubContext } from "../../../../context/GitHubContext";
 import { PostContainer, PostListContainer, TextContainer, TitleContainer } from "./styles";
@@ -23,7 +24,9 @@ export function PostList() {
                             <span>{handlePublishedDateRelativeToNow(issue.created_at)}</span>
                         </TitleContainer>
                         <TextContainer>
-                            <p>{issue.body}</p>
+                            <ReactMarkdown>
+                                {issue.body}
+                            </ReactMarkdown>
                         </TextContainer>
                     </PostContainer>
                 )
